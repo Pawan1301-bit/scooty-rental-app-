@@ -1,14 +1,14 @@
 const OWNER = {
   name: "Ritesh Bharatwaj",
   initials: "RB",
-  instagram: "sanatani.ritesh",  
+  instagram: "sanatan.wheels",  
   tagline: "Scooty rental owner · Haryana",
-  phone: "+91 85718 77619",
-  whatsapp: "91 85718 77619",
+  phone: "+91 98133 00416",
+  whatsapp: "91 98133 00416",
   location: "Near Graphic Era Clement Town, Dehradun, Uttarakhand",
   languages: "Hindi, English",
-  hours: "9:00 AM – 8:00 PM (all days)",
-  about: "Hi, I'm Ritesh, the founder of this ScootyGo. I started this business with a simple goal—to provide affordable, reliable, and convenient transportation for everyone. As a new entrepreneur, I am committed to offering well-maintained scooters and excellent customer service. Thank you for trusting us and being a part of our journey."
+  hours: "24 X 7",
+  about: "Hi, I'm Ritesh, the founder of this Sanatan Wheels. I started this business with a simple goal—to provide affordable, reliable, and convenient transportation for everyone. As a new entrepreneur, I am committed to offering well-maintained scooters and excellent customer service. Thank you for trusting us and being a part of our journey."
 };
 
 const SCOOTIES = [
