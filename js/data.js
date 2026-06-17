@@ -1,5 +1,5 @@
 const OWNER = {
-  name: "Ritesh Bharatwaj",
+  name: "Ritesh Bhardwaj",
   initials: "RB",
   instagram: "sanatan.wheels",  
   tagline: "Scooty rental owner · Haryana",
