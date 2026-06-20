@@ -1,19 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard — Sanatan Wheels</title>
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="icon" type="image/jpeg" href="../images/logo.jpeg"/>
+  <link rel="stylesheet" href="../css/style.css"/>
   <style>
     /* ── ADMIN LAYOUT ── */
-    .admin-wrap {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
+    .admin-wrap { max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px; }
 
     /* ── TABS ── */
     .admin-tabs {
@@ -26,7 +20,6 @@
       padding: 5px;
       width: fit-content;
     }
-
     .admin-tab {
       padding: 9px 18px;
       font-family: 'Inter', sans-serif;
@@ -40,12 +33,7 @@
       transition: background .15s, color .15s;
       position: relative;
     }
-
-    .admin-tab.active {
-      background: var(--orange);
-      color: var(--white);
-    }
-
+    .admin-tab.active { background: var(--orange); color: var(--white); }
     .admin-tab .tab-badge {
       display: inline-block;
       background: #A63010;
@@ -56,106 +44,43 @@
       border-radius: 10px;
       margin-left: 6px;
     }
-
-    .admin-tab.active .tab-badge {
-      background: rgba(255, 255, 255, .3);
-    }
-
-    .tab-panel {
-      display: none;
-    }
-
-    .tab-panel.active {
-      display: block;
-    }
+    .admin-tab.active .tab-badge { background: rgba(255,255,255,.3); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
 
     /* ── USER ROW ── */
     .user-row-photo {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--orange);
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 13px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--orange); color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px;
       flex-shrink: 0;
     }
-
     .view-dl-btn {
-      background: var(--cream);
-      color: var(--dark);
-      border: 1px solid var(--light);
-      border-radius: 8px;
-      padding: 7px 14px;
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
+      background: var(--cream); color: var(--dark);
+      border: 1px solid var(--light); border-radius: 8px;
+      padding: 7px 14px; font-size: 12px; font-weight: 500;
+      cursor: pointer; text-decoration: none; display: inline-block;
     }
-
-    .view-dl-btn:hover {
-      border-color: var(--orange);
-      color: var(--orange);
-    }
-
+    .view-dl-btn:hover { border-color: var(--orange); color: var(--orange); }
     .approve-btn {
-      background: #D8F5E6;
-      color: #1A6B3C;
-      border: none;
-      border-radius: 8px;
-      padding: 7px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity .15s;
+      background: #D8F5E6; color: #1A6B3C; border: none;
+      border-radius: 8px; padding: 7px 14px; font-size: 12px;
+      font-weight: 600; cursor: pointer; transition: opacity .15s;
     }
-
-    .approve-btn:hover {
-      opacity: .8;
-    }
-
+    .approve-btn:hover { opacity: .8; }
     .reject-btn {
-      background: #FFE8E0;
-      color: #A63010;
-      border: none;
-      border-radius: 8px;
-      padding: 7px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity .15s;
+      background: #FFE8E0; color: #A63010; border: none;
+      border-radius: 8px; padding: 7px 14px; font-size: 12px;
+      font-weight: 600; cursor: pointer; transition: opacity .15s;
     }
-
-    .reject-btn:hover {
-      opacity: .8;
-    }
-
+    .reject-btn:hover { opacity: .8; }
     .status-chip {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 20px;
+      font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
     }
-
-    .status-chip.pending {
-      background: #FEF0E0;
-      color: #A8730A;
-    }
-
-    .status-chip.approved {
-      background: #D8F5E6;
-      color: #1A6B3C;
-    }
-
-    .status-chip.rejected {
-      background: #FFE8E0;
-      color: #A63010;
-    }
+    .status-chip.pending  { background: #FEF0E0; color: #A8730A; }
+    .status-chip.approved { background: #D8F5E6; color: #1A6B3C; }
+    .status-chip.rejected { background: #FFE8E0; color: #A63010; }
 
     /* ── TOP BAR ── */
     .admin-topbar {
@@ -166,24 +91,14 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-
     .admin-title {
       font-family: 'Syne', sans-serif;
       font-size: 26px;
       font-weight: 800;
       color: var(--dark);
     }
-
-    .admin-title span {
-      color: var(--orange);
-    }
-
-    .topbar-right {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
+    .admin-title span { color: var(--orange); }
+    .topbar-right { display: flex; gap: 10px; align-items: center; }
     .add-btn {
       display: inline-flex;
       align-items: center;
@@ -199,11 +114,7 @@
       cursor: pointer;
       transition: background .18s;
     }
-
-    .add-btn:hover {
-      background: var(--orange-dk);
-    }
-
+    .add-btn:hover { background: var(--orange-dk); }
     .logout-btn {
       background: transparent;
       border: 1.5px solid var(--light);
@@ -216,11 +127,7 @@
       cursor: pointer;
       transition: border-color .15s, color .15s;
     }
-
-    .logout-btn:hover {
-      border-color: var(--orange);
-      color: var(--orange);
-    }
+    .logout-btn:hover { border-color: var(--orange); color: var(--orange); }
 
     /* ── STATS ROW ── */
     .stats-row {
@@ -229,7 +136,6 @@
       margin-bottom: 32px;
       flex-wrap: wrap;
     }
-
     .stat-card {
       flex: 1;
       min-width: 120px;
@@ -238,31 +144,16 @@
       border-radius: 14px;
       padding: 18px 20px;
     }
-
     .stat-num {
       font-family: 'Syne', sans-serif;
       font-size: 28px;
       font-weight: 800;
       color: var(--dark);
     }
-
-    .stat-num.orange {
-      color: var(--orange);
-    }
-
-    .stat-num.green {
-      color: #1A6B3C;
-    }
-
-    .stat-num.red {
-      color: #A63010;
-    }
-
-    .stat-label {
-      font-size: 12px;
-      color: var(--mid);
-      margin-top: 2px;
-    }
+    .stat-num.orange { color: var(--orange); }
+    .stat-num.green  { color: #1A6B3C; }
+    .stat-num.red    { color: #A63010; }
+    .stat-label { font-size: 12px; color: var(--mid); margin-top: 2px; }
 
     /* ── SCOOTY TABLE ── */
     .table-wrap {
@@ -271,7 +162,6 @@
       border-radius: 16px;
       overflow: hidden;
     }
-
     .table-header {
       display: flex;
       align-items: center;
@@ -279,18 +169,15 @@
       padding: 18px 24px;
       border-bottom: 1px solid var(--light);
     }
-
     .table-header-title {
       font-size: 15px;
       font-weight: 600;
       color: var(--dark);
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
     }
-
     thead th {
       text-align: left;
       padding: 12px 20px;
@@ -302,56 +189,30 @@
       background: var(--cream);
       border-bottom: 1px solid var(--light);
     }
-
     tbody tr {
       border-bottom: 1px solid var(--light);
       transition: background .12s;
     }
-
-    tbody tr:last-child {
-      border-bottom: none;
-    }
-
-    tbody tr:hover {
-      background: var(--cream);
-    }
-
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--cream); }
     td {
       padding: 14px 20px;
       font-size: 14px;
       color: var(--dark);
       vertical-align: middle;
     }
-
-    .td-name {
-      font-weight: 600;
-    }
-
-    .td-price {
-      color: var(--orange);
-      font-weight: 600;
-    }
+    .td-name { font-weight: 600; }
+    .td-price { color: var(--orange); font-weight: 600; }
 
     /* ── TOGGLE SWITCH ── */
-    .toggle-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .toggle-wrap { display: flex; align-items: center; gap: 8px; }
     .toggle {
       position: relative;
       width: 44px;
       height: 24px;
       cursor: pointer;
     }
-
-    .toggle input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
+    .toggle input { opacity: 0; width: 0; height: 0; }
     .toggle-slider {
       position: absolute;
       inset: 0;
@@ -359,7 +220,6 @@
       border-radius: 24px;
       transition: background .2s;
     }
-
     .toggle-slider::before {
       content: '';
       position: absolute;
@@ -371,38 +231,18 @@
       left: 3px;
       transition: transform .2s, background .2s;
     }
-
-    .toggle input:checked+.toggle-slider {
-      background: #D8F5E6;
-    }
-
-    .toggle input:checked+.toggle-slider::before {
+    .toggle input:checked + .toggle-slider { background: #D8F5E6; }
+    .toggle input:checked + .toggle-slider::before {
       transform: translateX(20px);
       background: #1A6B3C;
     }
-
-    .toggle-label {
-      font-size: 12px;
-      font-weight: 600;
-      min-width: 60px;
-    }
-
-    .toggle-label.avail {
-      color: #1A6B3C;
-    }
-
-    .toggle-label.busy {
-      color: #A63010;
-    }
+    .toggle-label { font-size: 12px; font-weight: 600; min-width: 60px; }
+    .toggle-label.avail { color: #1A6B3C; }
+    .toggle-label.busy  { color: #A63010; }
 
     /* ── ACTION BUTTONS ── */
-    .action-btns {
-      display: flex;
-      gap: 8px;
-    }
-
-    .edit-btn,
-    .del-btn {
+    .action-btns { display: flex; gap: 8px; }
+    .edit-btn, .del-btn {
       border: none;
       border-radius: 8px;
       padding: 7px 14px;
@@ -412,43 +252,23 @@
       cursor: pointer;
       transition: opacity .15s;
     }
-
-    .edit-btn {
-      background: var(--cream);
-      color: var(--dark);
-      border: 1px solid var(--light);
-    }
-
-    .edit-btn:hover {
-      border-color: var(--orange);
-      color: var(--orange);
-    }
-
-    .del-btn {
-      background: #FFE8E0;
-      color: #A63010;
-    }
-
-    .del-btn:hover {
-      opacity: .75;
-    }
+    .edit-btn { background: var(--cream); color: var(--dark); border: 1px solid var(--light); }
+    .edit-btn:hover { border-color: var(--orange); color: var(--orange); }
+    .del-btn  { background: #FFE8E0; color: #A63010; }
+    .del-btn:hover { opacity: .75; }
 
     /* ── MODAL ── */
     .modal-backdrop {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(26, 18, 8, .5);
+      background: rgba(26,18,8,.5);
       z-index: 200;
       align-items: center;
       justify-content: center;
       padding: 24px;
     }
-
-    .modal-backdrop.open {
-      display: flex;
-    }
-
+    .modal-backdrop.open { display: flex; }
     .modal {
       background: var(--white);
       border-radius: 20px;
@@ -458,7 +278,6 @@
       max-height: 90vh;
       overflow-y: auto;
     }
-
     .modal-title {
       font-family: 'Syne', sans-serif;
       font-size: 20px;
@@ -466,11 +285,7 @@
       margin-bottom: 24px;
       color: var(--dark);
     }
-
-    .form-field {
-      margin-bottom: 16px;
-    }
-
+    .form-field { margin-bottom: 16px; }
     .form-field label {
       display: block;
       font-size: 11px;
@@ -480,9 +295,7 @@
       text-transform: uppercase;
       letter-spacing: .6px;
     }
-
-    .form-field input,
-    .form-field select {
+    .form-field input, .form-field select {
       width: 100%;
       padding: 11px 14px;
       border: 1.5px solid var(--light);
@@ -494,28 +307,11 @@
       outline: none;
       transition: border-color .15s;
     }
-
     .form-field input:focus,
-    .form-field select:focus {
-      border-color: var(--orange);
-      background: var(--white);
-    }
-
-    .form-row {
-      display: flex;
-      gap: 12px;
-    }
-
-    .form-row .form-field {
-      flex: 1;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 24px;
-    }
-
+    .form-field select:focus { border-color: var(--orange); background: var(--white); }
+    .form-row { display: flex; gap: 12px; }
+    .form-row .form-field { flex: 1; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 24px; }
     .save-btn {
       flex: 1;
       padding: 12px;
@@ -529,16 +325,8 @@
       cursor: pointer;
       transition: background .18s;
     }
-
-    .save-btn:hover {
-      background: var(--orange-dk);
-    }
-
-    .save-btn:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
-
+    .save-btn:hover { background: var(--orange-dk); }
+    .save-btn:disabled { opacity: .6; cursor: not-allowed; }
     .cancel-btn {
       padding: 12px 20px;
       background: var(--cream);
@@ -550,10 +338,7 @@
       font-weight: 500;
       cursor: pointer;
     }
-
-    .cancel-btn:hover {
-      border-color: var(--mid);
-    }
+    .cancel-btn:hover { border-color: var(--mid); }
 
     /* ── EMPTY STATE ── */
     .empty-state {
@@ -561,15 +346,8 @@
       padding: 60px 24px;
       color: var(--mid);
     }
-
-    .empty-state .icon {
-      font-size: 48px;
-      margin-bottom: 12px;
-    }
-
-    .empty-state p {
-      font-size: 14px;
-    }
+    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; }
 
     /* ── LOADING ── */
     .loading {
@@ -596,34 +374,11 @@
       z-index: 999;
       pointer-events: none;
     }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: #1A6B3C; }
+    .toast.error   { background: #A63010; }
 
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .toast.success {
-      background: #1A6B3C;
-    }
-
-    .toast.error {
-      background: #A63010;
-    }
-
-    @media (max-width: 640px) {
-      table {
-        display: none;
-      }
-
-      .mobile-cards {
-        display: block !important;
-      }
-    }
-
-    .mobile-cards {
-      display: none;
-    }
-
+    .mobile-cards { display: none; }
     .mobile-scooty-card {
       background: var(--white);
       border: 1px solid var(--light);
@@ -631,9 +386,12 @@
       padding: 16px;
       margin-bottom: 12px;
     }
+    @media (max-width: 640px) {
+      table { display: none !important; }
+      .mobile-cards { display: block; }
+    }
   </style>
 </head>
-
 <body>
 
   <!-- HEADER -->
@@ -652,11 +410,7 @@
       </div>
       <div class="topbar-right">
         <button class="add-btn" onclick="openAddModal()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round">
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Add Scooty
         </button>
         <button class="logout-btn" onclick="handleLogout()">Logout</button>
@@ -674,48 +428,48 @@
     <!-- SCOOTIES TAB -->
     <div class="tab-panel active" id="panelScooties">
 
-      <!-- STATS -->
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-num orange" id="statTotal">—</div>
-          <div class="stat-label">Total scooties</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num green" id="statAvail">—</div>
-          <div class="stat-label">Available now</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num red" id="statRented">—</div>
-          <div class="stat-label">Rented out</div>
-        </div>
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num orange" id="statTotal">—</div>
+        <div class="stat-label">Total scooties</div>
       </div>
+      <div class="stat-card">
+        <div class="stat-num green" id="statAvail">—</div>
+        <div class="stat-label">Available now</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num red" id="statRented">—</div>
+        <div class="stat-label">Rented out</div>
+      </div>
+    </div>
 
-      <!-- TABLE -->
-      <div class="table-wrap">
-        <div class="table-header">
-          <div class="table-header-title">Your Fleet</div>
-          <div style="font-size:12px;color:var(--mid)">Updates live — no need to refresh</div>
-        </div>
-        <div id="loadingState" class="loading">Loading your scooties...</div>
-        <table id="scootyTable" style="display:none">
-          <thead>
-            <tr>
-              <th>Scooty</th>
-              <th>Rent / Day</th>
-              <th>Security</th>
-              <th>Engine</th>
-              <th>Availability</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="scootyTableBody"></tbody>
-        </table>
-        <div class="mobile-cards" id="mobileCards"></div>
-        <div class="empty-state" id="emptyState" style="display:none">
-          <div class="icon">🛵</div>
-          <p>No scooties yet. Click "Add Scooty" to get started!</p>
-        </div>
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="table-header-title">Your Fleet</div>
+        <div style="font-size:12px;color:var(--mid)">Updates live — no need to refresh</div>
       </div>
+      <div id="loadingState" class="loading">Loading your scooties...</div>
+      <table id="scootyTable" style="display:none">
+        <thead>
+          <tr>
+            <th>Scooty</th>
+            <th>Rent / Day</th>
+            <th>Security</th>
+            <th>Engine</th>
+            <th>Availability</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="scootyTableBody"></tbody>
+      </table>
+      <div class="mobile-cards" id="mobileCards"></div>
+      <div class="empty-state" id="emptyState" style="display:none">
+        <div class="icon">🛵</div>
+        <p>No scooties yet. Click "Add Scooty" to get started!</p>
+      </div>
+    </div>
 
     </div><!-- /panelScooties -->
 
@@ -755,24 +509,24 @@
 
       <div class="form-field">
         <label>Scooty Name</label>
-        <input type="text" id="fName" placeholder="e.g. Honda Activa 6G" />
+        <input type="text" id="fName" placeholder="e.g. Honda Activa 6G"/>
       </div>
 
       <div class="form-row">
         <div class="form-field">
           <label>Rent Per Day (₹)</label>
-          <input type="number" id="fRent" placeholder="e.g. 400" />
+          <input type="number" id="fRent" placeholder="e.g. 400"/>
         </div>
         <div class="form-field">
           <label>Security Deposit (₹)</label>
-          <input type="number" id="fSecurity" placeholder="e.g. 2000" />
+          <input type="number" id="fSecurity" placeholder="e.g. 2000"/>
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-field">
           <label>Engine CC</label>
-          <input type="text" id="fCC" placeholder="e.g. 110cc" />
+          <input type="text" id="fCC" placeholder="e.g. 110cc"/>
         </div>
         <div class="form-field">
           <label>Fuel Type</label>
@@ -785,7 +539,7 @@
 
       <div class="form-field">
         <label>Colour</label>
-        <input type="text" id="fColor" placeholder="e.g. Pearl Blue" />
+        <input type="text" id="fColor" placeholder="e.g. Pearl Blue"/>
       </div>
 
       <div class="form-field">
@@ -817,7 +571,7 @@
       getAllUsers, approveUser, rejectUser
     } from "../js/userService.js";
 
-    let editingId = null;
+    let editingId   = null;
     let allScooties = [];
     let usersLoaded = false;
 
@@ -830,7 +584,6 @@
         window.location.href = "admin-login.html";
         return;
       }
-
       const userEmail = (user.email || "").trim().toLowerCase();
       if (!ADMIN_EMAILS.includes(userEmail)) {
         // Logged in, but NOT the owner — kick them out immediately
@@ -850,9 +603,9 @@
         renderTable(scooties);
         updateStats(scooties);
         document.getElementById("loadingState").style.display = "none";
-        document.getElementById("scootyTable").style.display =
+        document.getElementById("scootyTable").style.display  =
           scooties.length ? "table" : "none";
-        document.getElementById("emptyState").style.display =
+        document.getElementById("emptyState").style.display   =
           scooties.length ? "none" : "block";
       });
 
@@ -861,7 +614,7 @@
     }
 
     // ── Tab switching ──
-    window.switchTab = function (tab) {
+    window.switchTab = function(tab) {
       const isScooties = tab === "scooties";
       document.getElementById("tabBtnScooties").classList.toggle("active", isScooties);
       document.getElementById("tabBtnUsers").classList.toggle("active", !isScooties);
@@ -876,13 +629,13 @@
     // ── Load all user signup requests ──
     async function loadUsers() {
       const loadingEl = document.getElementById("usersLoadingState");
-      const tableEl = document.getElementById("usersTable");
-      const emptyEl = document.getElementById("usersEmptyState");
-      const tbody = document.getElementById("usersTableBody");
+      const tableEl   = document.getElementById("usersTable");
+      const emptyEl   = document.getElementById("usersEmptyState");
+      const tbody     = document.getElementById("usersTableBody");
 
       loadingEl.style.display = "block";
-      tableEl.style.display = "none";
-      emptyEl.style.display = "none";
+      tableEl.style.display   = "none";
+      emptyEl.style.display   = "none";
 
       try {
         const users = await getAllUsers();
@@ -898,7 +651,7 @@
         tbody.innerHTML = "";
 
         users.forEach(u => {
-          const initials = (u.name || "?").trim().split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase();
+          const initials = (u.name || "?").trim().split(" ").map(p => p[0]).join("").slice(0,2).toUpperCase();
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>
@@ -929,18 +682,18 @@
 
       } catch (err) {
         loadingEl.style.display = "none";
-        emptyEl.style.display = "block";
+        emptyEl.style.display   = "block";
         emptyEl.querySelector("p").textContent = "Failed to load user requests.";
       }
     }
 
     // ── Update the pending-count badge on the tab ──
     async function refreshUsersBadge(usersList) {
-      const users = usersList || await getAllUsers();
-      const badge = document.getElementById("pendingBadge");
+      const users  = usersList || await getAllUsers();
+      const badge  = document.getElementById("pendingBadge");
       const pending = users.filter(u => u.status === "pending").length;
       if (pending > 0) {
-        badge.textContent = pending;
+        badge.textContent   = pending;
         badge.style.display = "inline-block";
       } else {
         badge.style.display = "none";
@@ -948,7 +701,7 @@
     }
 
     // ── Approve a user ──
-    window.handleApprove = async function (uid, name) {
+    window.handleApprove = async function(uid, name) {
       if (!confirm(`Approve "${name}"? They'll be able to book scooties online.`)) return;
       try {
         await approveUser(uid);
@@ -961,7 +714,7 @@
     };
 
     // ── Reject a user ──
-    window.handleReject = async function (uid, name) {
+    window.handleReject = async function(uid, name) {
       if (!confirm(`Reject "${name}"? They won't be able to book online.`)) return;
       try {
         await rejectUser(uid);
@@ -975,15 +728,15 @@
 
     function updateStats(scooties) {
       const avail = scooties.filter(s => s.available).length;
-      document.getElementById("statTotal").textContent = scooties.length;
-      document.getElementById("statAvail").textContent = avail;
+      document.getElementById("statTotal").textContent  = scooties.length;
+      document.getElementById("statAvail").textContent  = avail;
       document.getElementById("statRented").textContent = scooties.length - avail;
     }
 
     function renderTable(scooties) {
-      const tbody = document.getElementById("scootyTableBody");
-      const mobile = document.getElementById("mobileCards");
-      tbody.innerHTML = "";
+      const tbody   = document.getElementById("scootyTableBody");
+      const mobile  = document.getElementById("mobileCards");
+      tbody.innerHTML  = "";
       mobile.innerHTML = "";
 
       scooties.forEach(s => {
@@ -1038,7 +791,7 @@
     }
 
     // ── Toggle availability ──
-    window.handleToggle = async function (id, current) {
+    window.handleToggle = async function(id, current) {
       try {
         await toggleAvailability(id, current);
         showToast("Availability updated!", "success");
@@ -1048,45 +801,45 @@
     };
 
     // ── Open Add modal ──
-    window.openAddModal = function () {
+    window.openAddModal = function() {
       editingId = null;
       document.getElementById("modalTitle").textContent = "Add New Scooty";
-      document.getElementById("saveBtn").textContent = "Add Scooty";
+      document.getElementById("saveBtn").textContent    = "Add Scooty";
       clearForm();
       document.getElementById("modalBackdrop").classList.add("open");
     };
 
     // ── Open Edit modal ──
-    window.openEditModal = function (id) {
+    window.openEditModal = function(id) {
       const s = allScooties.find(x => x.id === id);
       if (!s) return;
       editingId = id;
       document.getElementById("modalTitle").textContent = "Edit Scooty";
-      document.getElementById("saveBtn").textContent = "Save Changes";
-      document.getElementById("fName").value = s.name;
-      document.getElementById("fRent").value = s.rentPerDay;
-      document.getElementById("fSecurity").value = s.security;
-      document.getElementById("fCC").value = s.cc;
-      document.getElementById("fFuel").value = s.fuel;
-      document.getElementById("fColor").value = s.color;
+      document.getElementById("saveBtn").textContent    = "Save Changes";
+      document.getElementById("fName").value      = s.name;
+      document.getElementById("fRent").value      = s.rentPerDay;
+      document.getElementById("fSecurity").value  = s.security;
+      document.getElementById("fCC").value        = s.cc;
+      document.getElementById("fFuel").value      = s.fuel;
+      document.getElementById("fColor").value     = s.color;
       document.getElementById("fAvailable").value = s.available ? "true" : "false";
       document.getElementById("modalBackdrop").classList.add("open");
     };
 
     // ── Close modal ──
-    window.closeModal = function () {
+    window.closeModal = function() {
       document.getElementById("modalBackdrop").classList.remove("open");
       editingId = null;
     };
 
     // ── Save (add or update) ──
-    window.saveScooty = async function () {
-      const name = document.getElementById("fName").value.trim();
-      const rentPerDay = Number(document.getElementById("fRent").value);
-      const security = Number(document.getElementById("fSecurity").value);
-      const cc = document.getElementById("fCC").value.trim();
-      const fuel = document.getElementById("fFuel").value;
-      const color = document.getElementById("fColor").value.trim();
+    window.saveScooty = async function() {
+      const name      = document.getElementById("fName").value.trim();
+      const rentPerDay= Number(document.getElementById("fRent").value);
+      const security  = Number(document.getElementById("fSecurity").value);
+      const cc        = document.getElementById("fCC").value.trim();
+      const fuel      = document.getElementById("fFuel").value;
+      const color     = document.getElementById("fColor").value.trim();
       const available = document.getElementById("fAvailable").value === "true";
 
       if (!name || !rentPerDay || !security || !cc || !color) {
@@ -1095,7 +848,7 @@
       }
 
       const btn = document.getElementById("saveBtn");
-      btn.disabled = true;
+      btn.disabled    = true;
       btn.textContent = "Saving...";
 
       const data = { name, rentPerDay, security, cc, fuel, color, available, emoji: "🛵" };
@@ -1112,13 +865,13 @@
       } catch (err) {
         showToast("Failed to save. Try again.", "error");
       } finally {
-        btn.disabled = false;
+        btn.disabled    = false;
         btn.textContent = editingId ? "Save Changes" : "Add Scooty";
       }
     };
 
     // ── Delete ──
-    window.handleDelete = async function (id, name) {
+    window.handleDelete = async function(id, name) {
       if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
       try {
         await deleteScooty(id);
@@ -1129,16 +882,16 @@
     };
 
     // ── Logout ──
-    window.handleLogout = async function () {
+    window.handleLogout = async function() {
       await signOut(auth);
       window.location.href = "admin-login.html";
     };
 
     function clearForm() {
-      ["fName", "fRent", "fSecurity", "fCC", "fColor"].forEach(id => {
+      ["fName","fRent","fSecurity","fCC","fColor"].forEach(id => {
         document.getElementById(id).value = "";
       });
-      document.getElementById("fFuel").value = "Petrol";
+      document.getElementById("fFuel").value      = "Petrol";
       document.getElementById("fAvailable").value = "true";
     }
 
@@ -1146,7 +899,7 @@
     function showToast(msg, type = "success") {
       const t = document.getElementById("toast");
       t.textContent = msg;
-      t.className = `toast ${type} show`;
+      t.className   = `toast ${type} show`;
       setTimeout(() => t.className = "toast", 2800);
     }
 
@@ -1157,5 +910,4 @@
   </script>
 
 </body>
-
 </html>

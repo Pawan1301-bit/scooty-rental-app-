@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Login — Sanatan Wheels</title>
   <link rel="stylesheet" href="../css/style.css"/>
-  <link rel="icon" type="image/jpeg" href="../images/logo.jpeg"/>
   <style>
     .login-wrap {
       min-height: 100vh;
@@ -23,6 +22,8 @@
       width: 100%;
       max-width: 400px;
       box-shadow: 0 4px 24px rgba(26,18,8,.10);
+      box-sizing: border-box;
+      overflow-wrap: break-word;
     }
     .login-logo {
       font-family: 'Syne', sans-serif;
@@ -30,8 +31,13 @@
       font-weight: 800;
       color: var(--dark);
       margin-bottom: 6px;
+      overflow-wrap: break-word;
     }
     .login-logo span { color: var(--orange); }
+    @media (max-width: 420px) {
+      .login-card { padding: 28px 22px; }
+      .login-logo { font-size: 20px; }
+    }
     .login-sub {
       font-size: 13px;
       color: var(--mid);
