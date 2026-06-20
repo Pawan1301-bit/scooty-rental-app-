@@ -386,6 +386,43 @@
       padding: 16px;
       margin-bottom: 12px;
     }
+    .table-scroll-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .user-mobile-card {
+      background: var(--white);
+      border: 1px solid var(--light);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .user-mobile-card .umc-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .user-mobile-card .umc-name { font-weight: 600; font-size: 14px; }
+    .user-mobile-card .umc-email { font-size: 12px; color: var(--mid); }
+    .user-mobile-card .umc-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .user-mobile-card .umc-label { color: var(--mid); }
+    .user-mobile-card .umc-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .user-mobile-card .umc-actions button,
+    .user-mobile-card .umc-actions a {
+      flex: 1;
+      text-align: center;
+    }
     @media (max-width: 640px) {
       table { display: none !important; }
       .mobile-cards { display: block; }
@@ -451,19 +488,21 @@
         <div style="font-size:12px;color:var(--mid)">Updates live — no need to refresh</div>
       </div>
       <div id="loadingState" class="loading">Loading your scooties...</div>
-      <table id="scootyTable" style="display:none">
-        <thead>
-          <tr>
-            <th>Scooty</th>
-            <th>Rent / Day</th>
-            <th>Security</th>
-            <th>Engine</th>
-            <th>Availability</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="scootyTableBody"></tbody>
-      </table>
+      <div class="table-scroll-wrap">
+        <table id="scootyTable" style="display:none">
+          <thead>
+            <tr>
+              <th>Scooty</th>
+              <th>Rent / Day</th>
+              <th>Security</th>
+              <th>Engine</th>
+              <th>Availability</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="scootyTableBody"></tbody>
+        </table>
+      </div>
       <div class="mobile-cards" id="mobileCards"></div>
       <div class="empty-state" id="emptyState" style="display:none">
         <div class="icon">🛵</div>
@@ -481,18 +520,21 @@
           <div style="font-size:12px;color:var(--mid)">Verify their DL before approving</div>
         </div>
         <div id="usersLoadingState" class="loading">Loading user requests...</div>
-        <table id="usersTable" style="display:none">
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>Phone</th>
-              <th>Licence</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="usersTableBody"></tbody>
-        </table>
+        <div class="table-scroll-wrap">
+          <table id="usersTable" style="display:none">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Phone</th>
+                <th>Licence</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody"></tbody>
+          </table>
+        </div>
+        <div class="mobile-cards" id="usersMobileCards"></div>
         <div class="empty-state" id="usersEmptyState" style="display:none">
           <div class="icon">👤</div>
           <p>No sign-up requests yet.</p>
@@ -632,10 +674,12 @@
       const tableEl   = document.getElementById("usersTable");
       const emptyEl   = document.getElementById("usersEmptyState");
       const tbody     = document.getElementById("usersTableBody");
+      const mobileEl  = document.getElementById("usersMobileCards");
 
       loadingEl.style.display = "block";
       tableEl.style.display   = "none";
       emptyEl.style.display   = "none";
+      mobileEl.innerHTML      = "";
 
       try {
         const users = await getAllUsers();
@@ -648,10 +692,13 @@
         }
 
         tableEl.style.display = "table";
-        tbody.innerHTML = "";
+        tbody.innerHTML  = "";
+        mobileEl.innerHTML = "";
 
         users.forEach(u => {
           const initials = (u.name || "?").trim().split(" ").map(p => p[0]).join("").slice(0,2).toUpperCase();
+
+          // Desktop row
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>
@@ -676,6 +723,35 @@
             </td>
           `;
           tbody.appendChild(tr);
+
+          // Mobile card
+          const card = document.createElement("div");
+          card.className = "user-mobile-card";
+          card.innerHTML = `
+            <div class="umc-top">
+              <div class="user-row-photo">${initials}</div>
+              <div>
+                <div class="umc-name">${u.name}</div>
+                <div class="umc-email">${u.email}</div>
+              </div>
+            </div>
+            <div class="umc-row">
+              <span class="umc-label">Phone</span>
+              <span>${u.phone}</span>
+            </div>
+            <div class="umc-row">
+              <span class="umc-label">Status</span>
+              <span class="status-chip ${u.status}">${u.status}</span>
+            </div>
+            <a class="view-dl-btn" style="display:block;text-align:center;margin-top:4px" href="${u.dlURL}" target="_blank" rel="noopener">View Licence</a>
+            ${u.status === "pending" ? `
+              <div class="umc-actions">
+                <button class="approve-btn" onclick="handleApprove('${u.id}', '${u.name}')">Approve</button>
+                <button class="reject-btn" onclick="handleReject('${u.id}', '${u.name}')">Reject</button>
+              </div>
+            ` : `<div style="font-size:12px;color:var(--mid);margin-top:10px;text-align:center">No action needed</div>`}
+          `;
+          mobileEl.appendChild(card);
         });
 
         refreshUsersBadge(users);
