@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Available Scooties — Sanatan Wheels</title>
-  <link rel="stylesheet" href="../css/style.css"/>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" type="image/jpeg" href="../images/logo.jpeg"/>
 </head>
+
 <body>
 
   <!-- HEADER -->
   <header>
     <a class="brand" href="../index.html">Sanatan<span>Wheels</span></a>
-    <a class="about-btn" href="about.html">About Owner</a>
+    <div class="header-right" id="headerAuthArea">
+      <a class="about-btn" href="about.html">About Owner</a>
+    </div>
   </header>
 
   <!-- SCOOTIES SECTION -->
@@ -37,16 +42,50 @@
   <script type="module">
     import { listenScooties } from "../js/scootyService.js";
 
-    const OWNER_PHONE = "+91 98765 43210"; // update with Ritesh's real number
+    import { auth } from "../firebase-config.js";
+    import { getUserProfile } from "../js/userService.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    const grid    = document.getElementById("scootyGrid");
+    // ── Auth state in header ──
+    const authArea = document.getElementById("headerAuthArea");
+
+    onAuthStateChanged(auth, async user => {
+      if (!user || !user.emailVerified) {
+        authArea.innerHTML = `
+         <a class="login-prompt-btn" href="login.html">Login</a>
+         <a class="about-btn" href="about.html">About Owner</a>
+       `;
+        return;
+      }
+      const profile = await getUserProfile(user.uid);
+      const status = profile?.status || "pending";
+      const initials = (profile?.name || user.email || "?").trim().split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase();
+      authArea.innerHTML = `
+       <div class="user-pill">
+         <div class="user-pill-avatar">${initials}</div>
+         <span class="pill-text">${profile?.name || user.email}</span>
+         <span class="status-dot ${status}" title="${status === 'approved' ? 'Verified — can book' : 'Pending owner approval'}"></span>
+       </div>
+       <button class="logout-link-btn" id="logoutBtn">Logout</button>
+       <a class="about-btn" href="about.html">About Owner</a>
+     `;
+      document.getElementById("logoutBtn").addEventListener("click", async () => {
+        await signOut(auth);
+        window.location.href = "../index.html";
+      });
+    });
+
+
+    const OWNER_PHONE = "+91 98133 00416"; // update with Ritesh's real number
+
+    const grid = document.getElementById("scootyGrid");
     const loading = document.getElementById("loadingState");
-    const empty   = document.getElementById("emptyState");
+    const empty = document.getElementById("emptyState");
 
     // Live listener — if Ritesh changes anything in admin, this page updates instantly
     listenScooties(scooties => {
       loading.style.display = "none";
-      grid.innerHTML        = "";
+      grid.innerHTML = "";
 
       if (scooties.length === 0) {
         empty.style.display = "block";
@@ -90,7 +129,7 @@
 
             <a
               class="call-btn"
-              href="tel:${OWNER_PHONE.replace(/\s/g,'')}"
+              href="tel:${OWNER_PHONE.replace(/\s/g, '')}"
               ${!s.available ? 'style="opacity:.5;pointer-events:none"' : ''}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -106,4 +145,5 @@
   </script>
 
 </body>
+
 </html>

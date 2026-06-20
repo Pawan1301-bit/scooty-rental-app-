@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — Sanatan Wheels</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link rel="icon" type="image/jpeg" href="../images/logo.jpeg"/>
+  <style>
+    .auth-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: var(--cream);
+    }
+    .auth-card {
+      background: var(--white);
+      border: 1px solid var(--light);
+      border-radius: 20px;
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 24px rgba(26,18,8,.10);
+    }
+    .auth-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .auth-logo span { color: var(--orange); }
+    .auth-sub { font-size: 13px; color: var(--mid); margin-bottom: 28px; }
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--mid);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+    .field input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--light);
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--dark);
+      background: var(--cream);
+      outline: none;
+      transition: border-color .15s;
+    }
+    .field input:focus { border-color: var(--orange); background: var(--white); }
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 12px;
+      color: var(--orange);
+      text-decoration: none;
+      margin-top: 5px;
+    }
+    .forgot-link:hover { text-decoration: underline; }
+    .submit-btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--orange);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .18s;
+      margin-top: 8px;
+    }
+    .submit-btn:hover { background: var(--orange-dk); }
+    .submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+    .error-msg {
+      display: none;
+      background: #FFE8E0;
+      color: #A63010;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: var(--mid);
+      font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--light);
+    }
+    .signup-link {
+      display: block;
+      text-align: center;
+      font-size: 13px;
+      color: var(--mid);
+    }
+    .signup-link a {
+      color: var(--orange);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .signup-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="brand" href="../index.html">Sanatan<span>Wheels</span></a>
+    <a class="about-btn" href="about.html">About Owner</a>
+  </header>
+
+  <div class="auth-wrap">
+    <div class="auth-card">
+
+      <div class="auth-logo">Welcome <span>back!</span></div>
+      <p class="auth-sub">Login to your Sanatan Wheels account.</p>
+
+      <div class="error-msg" id="errorMsg"></div>
+
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="fEmail" placeholder="your@email.com" autocomplete="email"/>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="fPassword" placeholder="••••••••" autocomplete="current-password"/>
+        <a class="forgot-link" href="forgot-password.html">Forgot password?</a>
+      </div>
+
+      <button class="submit-btn" id="submitBtn" onclick="handleLogin()">Login</button>
+
+      <div class="divider">or</div>
+
+      <div class="signup-link">
+        New here? <a href="signup.html">Create an account</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth }           from "../firebase-config.js";
+    import { getUserProfile } from "../js/userService.js";
+    import {
+      signInWithEmailAndPassword,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    // Already logged in
+    onAuthStateChanged(auth, async user => {
+      if (user && user.emailVerified) {
+        const profile = await getUserProfile(user.uid);
+        if (profile?.status === "approved") window.location.href = "scooties.html";
+        else window.location.href = "pending-approval.html";
+      }
+    });
+
+    window.handleLogin = async function() {
+      const email    = document.getElementById("fEmail").value.trim();
+      const password = document.getElementById("fPassword").value;
+      const btn      = document.getElementById("submitBtn");
+
+      if (!email || !password) return showError("Please enter your email and password.");
+
+      btn.disabled    = true;
+      btn.textContent = "Logging in...";
+      document.getElementById("errorMsg").style.display = "none";
+
+      try {
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        const user = cred.user;
+
+        if (!user.emailVerified) {
+          window.location.href = "verify-email.html";
+          return;
+        }
+
+        const profile = await getUserProfile(user.uid);
+        if (profile?.status === "approved") {
+          window.location.href = "scooties.html";
+        } else if (profile?.status === "rejected") {
+          showError("Your account was not approved. Please contact the owner on WhatsApp.");
+          btn.disabled    = false;
+          btn.textContent = "Login";
+        } else {
+          window.location.href = "pending-approval.html";
+        }
+
+      } catch(err) {
+        let msg = "Login failed. Check your email and password.";
+        if (err.code === "auth/user-not-found")   msg = "No account found with this email. Please sign up.";
+        if (err.code === "auth/wrong-password")    msg = "Wrong password. Please try again.";
+        if (err.code === "auth/too-many-requests") msg = "Too many attempts. Please wait and try again.";
+        showError(msg);
+        btn.disabled    = false;
+        btn.textContent = "Login";
+      }
+    };
+
+    function showError(msg) {
+      const el = document.getElementById("errorMsg");
+      el.textContent   = msg;
+      el.style.display = "block";
+    }
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Enter") window.handleLogin();
+    });
+  </script>
+
+</body>
+</html>

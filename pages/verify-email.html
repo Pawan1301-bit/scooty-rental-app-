@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verify Your Email — Sanatan Wheels</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link rel="icon" type="image/jpeg" href="../images/logo.jpeg"/>
+  <style>
+    .verify-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: var(--cream);
+    }
+    .verify-card {
+      background: var(--white);
+      border: 1px solid var(--light);
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 4px 24px rgba(26,18,8,.10);
+      text-align: center;
+    }
+    .verify-icon { font-size: 56px; margin-bottom: 20px; }
+    .verify-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 12px;
+    }
+    .verify-sub {
+      font-size: 14px;
+      color: var(--mid);
+      line-height: 1.65;
+      margin-bottom: 32px;
+    }
+    .verify-sub strong { color: var(--dark); }
+    .steps {
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+    .step-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-size: 13px;
+    }
+    .step-row:last-child { margin-bottom: 0; }
+    .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .resend-btn {
+      background: transparent;
+      border: 1.5px solid var(--light);
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--mid);
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: border-color .15s, color .15s;
+    }
+    .resend-btn:hover { border-color: var(--orange); color: var(--orange); }
+    .resend-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .check-btn {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      background: var(--orange);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .18s;
+      margin-bottom: 16px;
+    }
+    .check-btn:hover { background: var(--orange-dk); }
+    .back-link {
+      font-size: 13px;
+      color: var(--mid);
+      text-decoration: none;
+    }
+    .back-link:hover { color: var(--orange); }
+    .success-msg {
+      display: none;
+      background: #D8F5E6;
+      color: #1A6B3C;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="brand" href="../index.html">Sanatan<span>Wheels</span></a>
+    <a class="about-btn" href="about.html">About Owner</a>
+  </header>
+
+  <div class="verify-wrap">
+    <div class="verify-card">
+
+      <div class="verify-icon">📧</div>
+      <div class="verify-title">Check your inbox!</div>
+      <p class="verify-sub">
+        We've sent a verification link to <strong id="userEmail">your email</strong>.
+        Click the link in that email to verify your account.
+      </p>
+
+      <div class="steps">
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div>Open your email inbox and look for an email from <strong>Sanatan Wheels</strong></div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div>Click the <strong>"Verify Email"</strong> link inside that email</div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">3</div>
+          <div>Come back here and click <strong>"I've verified my email"</strong> below</div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">4</div>
+          <div>Wait for the owner to approve your account — usually within a few hours</div>
+        </div>
+      </div>
+
+      <div class="success-msg" id="successMsg">✓ Email verified! Redirecting...</div>
+
+      <button class="check-btn" onclick="checkVerification()">
+        I've verified my email →
+      </button>
+
+      <button class="resend-btn" id="resendBtn" onclick="resendEmail()">
+        Resend verification email
+      </button>
+
+      <br/>
+      <a class="back-link" href="../index.html">← Back to home</a>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth } from "../firebase-config.js";
+    import {
+      onAuthStateChanged,
+      sendEmailVerification,
+      reload
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    let currentUser = null;
+
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        window.location.href = "signup.html";
+        return;
+      }
+      currentUser = user;
+      document.getElementById("userEmail").textContent = user.email;
+    });
+
+    // Check if email is now verified
+    window.checkVerification = async function() {
+      if (!currentUser) return;
+      try {
+        await reload(currentUser); // refresh user state from Firebase
+        if (currentUser.emailVerified) {
+          document.getElementById("successMsg").style.display = "block";
+          setTimeout(() => window.location.href = "pending-approval.html", 1200);
+        } else {
+          alert("Email not verified yet. Please check your inbox and click the link first.");
+        }
+      } catch {
+        alert("Something went wrong. Please try again.");
+      }
+    };
+
+    // Resend verification email
+    window.resendEmail = async function() {
+      const btn = document.getElementById("resendBtn");
+      if (!currentUser) return;
+      try {
+        await sendEmailVerification(currentUser);
+        btn.textContent = "Email sent!";
+        btn.disabled    = true;
+        setTimeout(() => {
+          btn.textContent = "Resend verification email";
+          btn.disabled    = false;
+        }, 30000); // 30 second cooldown
+      } catch {
+        alert("Could not resend. Please wait a moment and try again.");
+      }
+    };
+  </script>
+
+</body>
+</html>

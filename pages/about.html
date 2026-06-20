@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About the Owner — ScootyGo</title>
-  <link rel="stylesheet" href="../css/style.css"/>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" type="image/jpeg" href="../images/logo.jpeg"/>
 </head>
+
 <body>
 
   <!-- HEADER -->
   <header>
     <a class="brand" href="../index.html">Sanatan<span>Wheels</span></a>
-    <a class="about-btn" href="scooties.html">View scooties</a>
+    <div class="header-right" id="headerAuthArea">
+      <a class="about-btn" href="scooties.html">View scooties</a>
+    </div>
   </header>
 
   <div class="about-wrap">
     <a class="back-link" href="scooties.html">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 5l-7 7 7 7" />
+      </svg>
       Back to scooties
     </a>
 
@@ -25,8 +33,42 @@
     </div>
   </div>
 
+  <script type="module">
+    import { auth } from "../firebase-config.js";
+    import { getUserProfile } from "../js/userService.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    const authArea = document.getElementById("headerAuthArea");
+    onAuthStateChanged(auth, async user => {
+      if (!user || !user.emailVerified) {
+        authArea.innerHTML = `
+         <a class="login-prompt-btn" href="login.html">Login</a>
+         <a class="about-btn" href="scooties.html">View scooties</a>
+       `;
+        return;
+      }
+      const profile = await getUserProfile(user.uid);
+      const status = profile?.status || "pending";
+      const initials = (profile?.name || user.email || "?").trim().split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase();
+      authArea.innerHTML = `
+       <div class="user-pill">
+         <div class="user-pill-avatar">${initials}</div>
+         <span class="pill-text">${profile?.name || user.email}</span>
+         <span class="status-dot ${status}" title="${status === 'approved' ? 'Verified — can book' : 'Pending owner approval'}"></span>
+       </div>
+       <button class="logout-link-btn" id="logoutBtn">Logout</button>
+       <a class="about-btn" href="scooties.html">View scooties</a>
+     `;
+      document.getElementById("logoutBtn").addEventListener("click", async () => {
+        await signOut(auth);
+        window.location.href = "../index.html";
+      });
+    });
+  </script>
+
+
   <script src="../js/data.js"></script>
   <script>
+
     const card = document.getElementById('ownerCard');
 
     card.innerHTML = `
@@ -86,7 +128,7 @@
 
       <div style="display:flex;gap:12px;flex-wrap:wrap">
         <a
-          href="tel:${OWNER.phone.replace(/\s/g,'')}"
+          href="tel:${OWNER.phone.replace(/\s/g, '')}"
           class="call-btn"
           style="flex:1;min-width:140px"
         >
@@ -107,4 +149,5 @@
   </script>
 
 </body>
+
 </html>
